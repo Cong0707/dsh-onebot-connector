@@ -49,7 +49,43 @@ dsh plugin --profile web add github:<你>/dsh-onebot-connector
 | `onebot_list_groups` | 群列表 + 每群最后一条消息（概览，不是全文） |
 | `onebot_read_group` | 读某群最近消息（主动读才看得见） |
 | `onebot_send_message` | 发文本（需开 allowSend） |
+| `onebot_faces` | 查 QQ 表情名字和 id |
 | `onebot_send_sticker` | 发表情/图片（需开 allowSticker） |
+
+## 表情
+
+QQ 的 `face` 段只有一个数字 id（`{type:"face",data:{id:"341"}}`），模型看到 `341` 什么也读不出来。
+所以插件内置了一张从 QQ 客户端里抽的官方表情表（`lib/faces.js`，282 条，覆盖 id 0~417）：
+
+**看** —— 收到的表情在文本里直接翻成名字：
+
+```
+[QQ群 神经（698206047）] 某人: 你好[表情:微笑]
+[QQ群 神经（698206047）] 某人: [表情:打招呼]在吗
+```
+
+**发** —— 按名字发，插件负责翻 id：
+
+```js
+onebot_send_sticker({ group_id: 123, source: "face:斜眼笑" })
+onebot_send_sticker({ group_id: 123, source: "face:14" })        // 等价
+onebot_send_sticker({ group_id: 123, source: "C:/pics/笑死.gif" })
+```
+
+**查** —— 不确定名字就先搜：
+
+```
+onebot_faces({ query: "笑" })
+→ 微笑(14)、偷笑(20)、憨笑(28)、坏笑(101)、斜眼笑(178)、笑哭(182)…
+```
+
+图片和表情包一律落盘到 `~/.dsh/plugins-data/onebot-connector/images/`，模型可以用 `read_image` 真看到内容——不是只给三个字「[图片]」。
+
+## 让模型爱用表情
+
+能力给了，习不习惯用是提示词的事。把类似这段写进目标会话的 system prompt 会明显好使：
+
+> 你在 QQ 群里聊天，不是写报告。多用短句，适当用 `onebot_send_sticker` 发 `face:名字` 的 QQ 表情表达情绪（`onebot_faces` 可以查名字）。别人发了表情，你可以接着用表情回。
 
 ## 安全
 
