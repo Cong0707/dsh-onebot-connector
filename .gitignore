@@ -7,3 +7,7 @@ state/
 credentials.json
 *-credentials.json
 secrets/
+# 本地调试产物
+_imgs/
+_*.mjs
+*.tmp
