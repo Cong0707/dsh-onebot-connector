@@ -49,6 +49,8 @@ dsh plugin --profile web add github:<你>/dsh-onebot-connector
 | `onebot_list_groups` | 群列表 + 每群最后一条消息（概览，不是全文） |
 | `onebot_read_group` | 读某群最近消息（主动读才看得见） |
 | `onebot_send_message` | 发文本（需开 allowSend） |
+| `onebot_send_image` | 发图片（需开 allowSend） |
+| `onebot_stickers` | 列本地表情图目录 |
 | `onebot_faces` | 查 QQ 表情名字和 id |
 | `onebot_send_sticker` | 发表情/图片（需开 allowSticker） |
 
@@ -64,13 +66,21 @@ QQ 的 `face` 段只有一个数字 id（`{type:"face",data:{id:"341"}}`），�
 [QQ群 神经（698206047）] 某人: [表情:打招呼]在吗
 ```
 
-**发** —— 按名字发，插件负责翻 id：
+**发** —— 三种表情来源，和发图片是两条独立的路：
 
 ```js
+// 表情：QQ 小黄脸 / 收藏的表情包 / 本地表情图
 onebot_send_sticker({ group_id: 123, source: "face:斜眼笑" })
-onebot_send_sticker({ group_id: 123, source: "face:14" })        // 等价
-onebot_send_sticker({ group_id: 123, source: "C:/pics/笑死.gif" })
+onebot_send_sticker({ group_id: 123, source: "fav:3" })
+onebot_send_sticker({ group_id: 123, source: "pic:无语.gif" })
+
+// 图片：照片、截图 —— 不带表情语义
+onebot_send_image({ group_id: 123, source: "C:/pics/截图.png" })
+onebot_send_image({ group_id: 123, source: "https://example.com/a.jpg" })
 ```
+
+两条路分开是为了让模型能自己选：聊天时该甩表情还是该发图，是两回事。
+`onebot_send_sticker` 故意不收裸路径，写错了会明确提示改去用 `onebot_send_image`。
 
 **查** —— 不确定名字就先搜：
 
