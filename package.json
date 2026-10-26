@@ -1,0 +1,58 @@
+{
+  "name": "dsh-onebot-connector",
+  "version": "0.1.0",
+  "description": "OneBot v11 connector for DeepSeek Harness: connect any OneBot implementation (NapCat, LLOneBot, Lagrange, go-cqhttp...) and bridge QQ groups into DSH sessions.",
+  "type": "module",
+  "main": "lib/index.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "default": "./lib/client.js"
+    },
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-plugin-manager",
+        "@deepseek-ai/dsh-client-ui-session",
+        "@deepseek-ai/dsh-client-ui-workspace"
+      ],
+      "platform": "web"
+    }
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "plugin",
+    "onebot",
+    "qq",
+    "napcat",
+    "lagrange"
+  ],
+  "dependencies": {
+    "@deepseek-ai/schemastery": "~3.18.5",
+    "node-napcat-ts": "^0.4.25"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-agent": ">=0.2.0-rc.2 <0.3.0",
+    "@deepseek-ai/dsh-tools": ">=0.2.0-rc.2 <0.3.0"
+  }
+}

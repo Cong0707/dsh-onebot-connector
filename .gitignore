@@ -1,0 +1,9 @@
+node_modules/
+*.log
+.env
+data/
+state/
+# 绝不允许任何凭据进仓库
+credentials.json
+*-credentials.json
+secrets/

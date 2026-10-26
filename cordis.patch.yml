@@ -1,0 +1,18 @@
+# dsh-onebot-connector 的宿主补丁：声明需要哪些服务。
+# 没有 inject 时 ctx.get('tools') 会是 undefined，工具注册会静默失败。
+- insert:
+    - id: onebot-connector
+      name: dsh-onebot-connector
+      inject:
+        - tools
+        - agents
+        - webServer
+      config:
+        enabled: 'true'
+        baseUrl: ''
+        accessToken: ''
+        passiveGroups: ''
+        targetSession: ''
+        allowSend: 'false'
+        allowSticker: 'false'
+        allowActiveRead: 'true'
