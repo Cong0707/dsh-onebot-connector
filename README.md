@@ -22,7 +22,7 @@
 ## 安装
 
 ```powershell
-dsh plugin --profile web add github:<你>/dsh-onebot-connector
+dsh plugin --profile web add github:Cong0707/dsh-onebot-connector
 ```
 
 本地开发可以直接把目录放进 profile 的 `node_modules`。
